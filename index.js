@@ -24,7 +24,7 @@
     }
 
     function initBuffers(vertices) {
-      var n = vertices.length / 2;
+      var n = vertices.length / 3;
 
       var vertexBuffer = gl.createBuffer();
       if (!vertexBuffer) {
@@ -41,76 +41,73 @@
         return -1;
       }
 
-      gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
+      gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
       gl.enableVertexAttribArray(vPosition);
       return n;
     }
 
-    var hurufVertices = new Float32Array([
-      -0.7, -0.5,  -0.7, +0.5,  -0.6, +0.5, -0.6, +0.1,  -0.4, +0.1,  -0.4, +0.5,  -0.3, +0.5,  -0.3, -0.5, -0.4, -0.5, -0.4, -0.1, -0.6, -0.1, -0.6, -0.5,
+    var atas = new Float32Array([
+      -0.5, 0.5, -0.5,
+      -0.5,  0.5, 0.5,
+      0.5,  0.5, 0.5,
+      0.5, 0.5,  -0.5
     ]);
-    var hurufVertices2 = new Float32Array([
-      -0.7, -0.5,  -0.75, -0.4,  -0.75, 0.6,  -0.7, +0.5
+    var bawah = new Float32Array([
+      -0.5, -0.5, -0.5,
+      -0.5,  -0.5, +0.5,
+      0.5,  -0.5, 0.5,
+      0.5, -0.5,  -0.5
     ]);
-    var linesVertices3 = new Float32Array([
-      -0.75, 0.6,   -0.65, +0.6,  -0.6, +0.5
+    var pilar1 = new Float32Array([
+      -0.5, -0.5, -0.5,
+      -0.5,  0.5, -0.5
     ]);
-    var linesVertices4 = new Float32Array([
-      -0.3, +0.5,   -0.35, +0.6,  -0.45, 0.6,   -0.45, 0.2,   -0.6, 0.2
+    var pilar2 = new Float32Array([
+      0.5, -0.5, -0.5,
+      0.5,  0.5, -0.5
     ]);
-    var linesVertices5 = new Float32Array([
-      -0.4, +0.5,   -0.45, +0.6
+    var pilar3 = new Float32Array([
+      0.5, -0.5, 0.5,
+      0.5,  0.5, 0.5
     ]);
-    var linesVertices6 = new Float32Array([
-      -0.4, +0.1,   -0.45, +0.2
-    ]);
-    var linesVertices7 = new Float32Array([
-      -0.4, -0.5,   -0.45, -0.4,  -0.45, -0.1
+    var pilar4 = new Float32Array([
+      -0.5, -0.5, 0.5,
+      -0.5,  0.5, 0.5
     ]);
 
     var triangleVertices1 = new Float32Array([
-      0.2, -0.5,  0.2, +0.5,  0.3, +0.5,  0.3, -0.5
+      0.2, -0.5, 0.0,  0.2, +0.5, 0.0,  0.3, +0.5, 0.0,  0.3, -0.5, 0.0
     ]);
     var triangleVertices2 = new Float32Array([
-      0.5, -0.5,  0.5, +0.5,  0.6, +0.5,  0.6, -0.5
+      0.5, -0.5, 0.0,  0.5, +0.5, 0.0,  0.6, +0.5, 0.0,  0.6, -0.5, 0.0
     ]);
     var triangleVertices3 = new Float32Array([
-      0.3, -0.1,  0.3, +0.1,  0.5, +0.1,  0.5, -0.1
+      0.3, -0.1, 0.0,  0.3, +0.1, 0.0,  0.5, +0.1, 0.0,  0.5, -0.1, 0.0
     ]);
     var linesVertices21 = new Float32Array([
-      0.2, -0.5,  0.15, -0.4,  0.15, 0.6
+      0.2, -0.5, 0.0,  0.15, -0.4, 0.0,  0.15, 0.6, 0.0
     ]);
     var linesVertices31 = new Float32Array([
-      0.15, 0.6,   0.25, +0.6,  0.3, +0.5
+      0.15, 0.6, 0.0,   0.25, +0.6, 0.0,  0.3, +0.5, 0.0
     ]);
     var linesVertices41 = new Float32Array([
-      0.6, +0.5,   0.55, +0.6,  0.45, 0.6,   0.45, 0.2,   0.3, 0.2
+      0.6, +0.5, 0.0,   0.55, +0.6, 0.0,  0.45, 0.6, 0.0,   0.45, 0.2, 0.0,   0.3, 0.2, 0.0
     ]);
     var linesVertices71 = new Float32Array([
-      0.50, -0.5,   0.45, -0.4,  0.45, -0.1
+      0.50, -0.5, 0.0,   0.45, -0.4, 0.0,  0.45, -0.1, 0.0
     ]);
     
-    var originxLoc = gl.getUniformLocation(program, 'originx');
-    var originyLoc = gl.getUniformLocation(program, 'originy');
-
-    var ioriginxLoc = gl.getUniformLocation(program, 'ioriginx');
-    var ioriginyLoc = gl.getUniformLocation(program, 'ioriginy');
-
-    var thetaLocation = gl.getUniformLocation(program, 'theta');
+    var mmLoc = gl.getUniformLocation(program, 'modelMatrix');
+    var mm = glMatrix.mat4.create();
+    var vecScale = [ 1.0, 1.0, 1.0 ];
+    var vecScaleH = [ 0.3, 0.3, 0.3 ];
+    var trans = {
+      x: 0.0, y: 0.0, z:0.0
+    }
+    var xAdders = 0.04;
+    var yAdders = 0.03;
+    var zAdders = 0.02;
     var theta = 0.0;
-    var theta2 = 0.0;
-
-    var sxLoc = gl.getUniformLocation(program, 'sx');
-    var sx = 1.0;
-    var sx2 = 1.0;
-    var syLoc = gl.getUniformLocation(program, 'sy');
-    var sy = 1.0;
-    var sy2 = 1.0;
-    var szLoc = gl.getUniformLocation(program, 'sz');
-    var sz = 1.0;
-    var sz2 = 1.0;
-
-    var flag = 0;
 
     function render() {
       // Bersihkan layar jadi hitam
@@ -119,66 +116,51 @@
       // Bersihkan buffernya canvas
       gl.clear(gl.COLOR_BUFFER_BIT);
 
+      // Cube
+      // Biar Cube-nya nggak ikut kecil sama H
+      mm = glMatrix.mat4.create(); //reset matrix to origin
+      glMatrix.mat4.scale(mm, mm, vecScale);
+      //Muter Cube-nya
+      theta += 0.0037;
+      glMatrix.mat4.rotateX(mm, mm, -0.25);
+      glMatrix.mat4.rotateY(mm, mm, 0.3);
+      gl.uniformMatrix4fv(mmLoc, false, mm);
+      // nge-draw Cube-nya
+      genDraw(gl.LINE_LOOP, atas);
+      genDraw(gl.LINE_LOOP, bawah);
+      genDraw(gl.LINES, pilar1);
+      genDraw(gl.LINES, pilar2);
+      genDraw(gl.LINES, pilar3);
+      genDraw(gl.LINES, pilar4);
+
+      // Huruf H
+      //Mengecilkan huruf H
+      mm = glMatrix.mat4.create(); //reset matrix to origin
+      glMatrix.mat4.scale(mm, mm, vecScaleH);
       // Rotate
       theta += 0.0037;
-      gl.uniform1f(thetaLocation, theta);
-
-      //Skala
-      gl.uniform1f(sxLoc, sx);
-      gl.uniform1f(syLoc, sy);
-      gl.uniform1f(szLoc, sz);
-
-      // Origin
-      var originx = 0.5;
-      var originy = 0.0;
-      var ioriginx = -0.5;    
-      var ioriginy = 0.0;
-      gl.uniform1f(originxLoc, originx);
-      gl.uniform1f(originyLoc, originy);
-      gl.uniform1f(ioriginxLoc, ioriginx);
-      gl.uniform1f(ioriginyLoc, ioriginy);
-
-      genDraw(gl.LINE_LOOP, hurufVertices);
-      genDraw(gl.LINE_LOOP, hurufVertices2);
-      genDraw(gl.LINE_STRIP, linesVertices3);
-      genDraw(gl.LINE_STRIP, linesVertices4);
-      genDraw(gl.LINE_STRIP, linesVertices5);
-      genDraw(gl.LINE_STRIP, linesVertices6);
-      genDraw(gl.LINE_STRIP, linesVertices7);
-
-      // Origin2
-      var originx = -0.4;
-      var originy = 0.0;
-      var ioriginx = 0.4;    
-      var ioriginy = 0.0; 
-      gl.uniform1f(originxLoc, originx);
-      gl.uniform1f(originyLoc, originy);
-      gl.uniform1f(ioriginxLoc, ioriginx);
-      gl.uniform1f(ioriginyLoc, ioriginy);
-
-      //Pseudo-rotation
-      if(flag==0){
-        sx2+=0.0037;
+      glMatrix.mat4.rotateY(mm, mm, theta);
+      //Biar H-nya jalan-jalan
+      console.log(trans.x);
+      if(trans.x + 0.5 > 0.5*3.5|| trans.x + -0.5 < -0.5*3.5)
+      {
+        xAdders *= -1;
       }
-      else if(flag==1){
-        sx2-=0.0037; 
+      trans.x += xAdders;
+      if(trans.y + 0.5 > 0.5*3.5 || trans.y + -0.5 < -0.5*3.5)
+      {
+        yAdders *= -1;
       }
+      trans.y += yAdders;
+      if(trans.z + 0.5 > 0.5*3.5 || trans.z + -0.5 < -0.5*3.5)
+      {
+        zAdders *= -1;
+      }
+      trans.z += zAdders;
 
-      if(sx2<=-1){
-        flag = 0;
-      }
-      else if(sx2>=1){
-        flag = 1;        
-      }
-      
-      //Skala
-      gl.uniform1f(sxLoc, sx2);
-      gl.uniform1f(syLoc, sy2);
-      gl.uniform1f(szLoc, sz2);
+      glMatrix.mat4.translate(mm, mm, [trans.x, trans.y, trans.z]);
 
-      //Hentikan Rotasi
-      theta2 -= 0.0;
-      gl.uniform1f(thetaLocation, theta2);
+      gl.uniformMatrix4fv(mmLoc, false, mm);
 
       genDraw(gl.TRIANGLE_FAN, triangleVertices1);
       genDraw(gl.TRIANGLE_FAN, triangleVertices2);
@@ -190,6 +172,7 @@
   
       requestAnimationFrame(render);
     }
+    gl.enable(gl.DEPTH_TEST);
     render();
   }
 })();
